@@ -1,9 +1,4 @@
 // Databricks notebook source
-# md
-#Learning ADB professionally
-
-// COMMAND ----------
-
 val defaultMoviesUrl = "https://advtrainsb.blob.core.windows.net/data/movies.csv"
 val defaultRatingsUrl = "adl://advtraindatalakestorage.azuredatalakestore.net/ratings.csv"
 
@@ -12,20 +7,16 @@ val ratingsUrl = dbutils.widgets.text("ratingsUrl", "")
 
 var inputMoviesUrl = dbutils.widgets.get("moviesUrl")
 
-if(inputMoviesUrl == null) {
+if(inputMoviesUrl == null || inputMoviesUrl == "") {
   inputMoviesUrl = defaultMoviesUrl
 }
 
 var inputRatingsUrl = dbutils.widgets.get("ratingsUrl")
 
-if(inputRatingsUrl == null) {
+if(inputRatingsUrl == null || inputRatingsUrl == "") {
   inputRatingsUrl = defaultRatingsUrl
 }
 
-
-// COMMAND ----------
-
-println(inputRatingsUrl)
 
 // COMMAND ----------
 
@@ -107,3 +98,14 @@ val mappedFinalOuptut = finalOutput.map(record => (broadcastedMovies.value()(rec
 
 // COMMAND ----------
 
+mappedFinalOuptut.foreach(println)
+
+// COMMAND ----------
+
+case class MovieResult {movieName: String, noOfHits: Int};
+
+val movieResults = mappedFinalOutput.map(result => MovieResult(result._1, result._2))
+val movieRDD = sc.parallelize(movieResults)
+val dataFrame = spark.sqlContext.createDataFrame(movieRDD)
+
+dataFrame.show
