@@ -1,4 +1,9 @@
 // Databricks notebook source
+// MAGIC %md 
+// MAGIC #Learning Databricks Professionally
+
+// COMMAND ----------
+
 val defaultMoviesUrl = "https://advtrainsb.blob.core.windows.net/data/movies.csv"
 val defaultRatingsUrl = "adl://advtraindatalakestorage.azuredatalakestore.net/ratings.csv"
 
@@ -102,10 +107,29 @@ mappedFinalOuptut.foreach(println)
 
 // COMMAND ----------
 
-case class MovieResult {movieName: String, noOfHits: Int};
+case class MovieResult (movieName: String, noOfHits: Int)
 
-val movieResults = mappedFinalOutput.map(result => MovieResult(result._1, result._2))
-val movieRDD = sc.parallelize(movieResults)
-val dataFrame = spark.sqlContext.createDataFrame(movieRDD)
+val movieResults = mappedFinalOuptut.map(result => MovieResult(result._1, result._2))
+val moviesRDD = sc.parallelize(movieResults)
+val dataFrame = spark.sqlContext.createDataFrame(moviesRDD)
 
-dataFrame.show
+display(dataFrame)
+
+// COMMAND ----------
+
+// MAGIC %md
+// MAGIC 
+// MAGIC ![Azure Data Bricks](https://azure.microsoft.com/svghandler/databricks?width=600&height=315)
+
+// COMMAND ----------
+
+// MAGIC 
+// MAGIC %md
+// MAGIC 
+// MAGIC \\(c = \\pm\\sqrt{a^2 + b^2} \\)
+// MAGIC 
+// MAGIC \\( f(\beta)= -Y_t^T X_t \beta + \sum log( 1+{e}^{X_t\bullet\beta}) + \frac{1}{2}\delta^t S_t^{-1}\delta\\)
+// MAGIC 
+// MAGIC where \\(\delta=(\beta - \mu_{t-1})\\)
+// MAGIC 
+// MAGIC $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
